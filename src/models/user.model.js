@@ -40,6 +40,11 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: 'user',
     },
+    balance: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,

@@ -37,9 +37,14 @@ app.use(mongoSanitize());
 // gzip compression
 app.use(compression());
 
-// enable cors
-app.use(cors());
-app.options('*', cors());
+// enable cors (allow all origins, include credentials and common headers/methods)
+const corsOptions = {
+  origin: "*", // hoặc ghi rõ domain ngrok
+  methods: "GET,POST,PUT,PATCH,DELETE",
+  allowedHeaders: "Content-Type, Authorization"
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 // jwt authentication
 app.use(passport.initialize());

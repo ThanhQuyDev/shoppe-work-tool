@@ -39,9 +39,9 @@ app.use(compression());
 
 // enable cors (allow all origins, include credentials and common headers/methods)
 const corsOptions = {
-  origin: "*", // hoặc ghi rõ domain ngrok
-  methods: "GET,POST,PUT,PATCH,DELETE",
-  allowedHeaders: "Content-Type, Authorization"
+  origin: '*', // hoặc ghi rõ domain ngrok
+  methods: 'GET,POST,PUT,PATCH,DELETE',
+  allowedHeaders: 'Content-Type, Authorization',
 };
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
@@ -62,7 +62,6 @@ app.use('/v1', routes);
 app.get('/', (req, res) => {
   res.send('Server is running!'); // hoặc trả JSON: res.json({ message: 'Server is running!' });
 });
-
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {

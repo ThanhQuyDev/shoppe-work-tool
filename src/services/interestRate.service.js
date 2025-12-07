@@ -71,4 +71,3 @@ module.exports = {
   updateInterestRateById,
   deleteInterestRateById,
 };
-

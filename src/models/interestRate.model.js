@@ -52,4 +52,3 @@ interestRateSchema.plugin(paginate);
 const InterestRate = mongoose.model('InterestRate', interestRateSchema);
 
 module.exports = InterestRate;
-

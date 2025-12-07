@@ -13,17 +13,11 @@ router
     validate(interestRateValidation.createInterestRate),
     interestRateController.createInterestRate
   )
-  .get(
-    validate(interestRateValidation.getInterestRates),
-    interestRateController.getInterestRates
-  );
+  .get(validate(interestRateValidation.getInterestRates), interestRateController.getInterestRates);
 
 router
   .route('/:interestRateId')
-  .get(
-    validate(interestRateValidation.getInterestRate),
-    interestRateController.getInterestRate
-  )
+  .get(validate(interestRateValidation.getInterestRate), interestRateController.getInterestRate)
   .patch(
     auth('manageInterestRates'),
     validate(interestRateValidation.updateInterestRate),
@@ -283,4 +277,3 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-

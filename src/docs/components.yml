@@ -32,7 +32,7 @@ components:
           type: string
         duration:
           type: string
-          description: Ky han gui tiet kiem (vi du: '10 thang', '12 thang')
+          description: "Ky han gui tiet kiem (vi du: '10 thang', '12 thang')"
         durationAmount:
           type: number
           description: So thang (vi du: 10, 12)

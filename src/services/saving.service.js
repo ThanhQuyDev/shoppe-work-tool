@@ -2,7 +2,6 @@ const httpStatus = require('http-status');
 const { Saving, InterestRate, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-
 const addMonths = (date, months) => {
   const result = new Date(date);
   result.setMonth(result.getMonth() + months);
@@ -87,5 +86,3 @@ module.exports = {
   querySavings,
   getSavingById,
 };
-
-

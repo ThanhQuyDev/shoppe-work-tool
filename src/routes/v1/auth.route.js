@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.post('/register', validate(authValidation.register), authController.register);
 router.post('/login', validate(authValidation.login), authController.login);
+router.post('/admin/login', validate(authValidation.adminLogin), authController.adminLogin);
 router.post('/logout', validate(authValidation.logout), authController.logout);
 router.post('/refresh-tokens', validate(authValidation.refreshTokens), authController.refreshTokens);
 router.post('/forgot-password', validate(authValidation.forgotPassword), authController.forgotPassword);
@@ -119,6 +120,55 @@ module.exports = router;
  *             example:
  *               code: 401
  *               message: Invalid email or password
+ */
+
+/**
+ * @swagger
+ * /auth/admin/login:
+ *   post:
+ *     summary: Login admin
+ *     description: Chi admin moi duoc dang nhap thanh cong. Neu la user hoac khong ton tai thi bao sai thong tin dang nhap.
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *             example:
+ *               email: admin@example.com
+ *               password: password1
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   $ref: '#/components/schemas/User'
+ *                 tokens:
+ *                   $ref: '#/components/schemas/AuthTokens'
+ *       "401":
+ *         description: Sai thong tin dang nhap
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             example:
+ *               code: 401
+ *               message: Sai thong tin dang nhap
  */
 
 /**

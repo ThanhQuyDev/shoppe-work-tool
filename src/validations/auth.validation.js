@@ -49,9 +49,17 @@ const verifyEmail = {
   }),
 };
 
+const adminLogin = {
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   register,
   login,
+  adminLogin,
   logout,
   refreshTokens,
   forgotPassword,

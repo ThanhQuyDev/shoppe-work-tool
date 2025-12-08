@@ -9,7 +9,18 @@ const createInterestRate = {
     rate: Joi.number().required().min(0),
     minAmount: Joi.number().required().min(0),
     description: Joi.string().allow(''),
-    img: Joi.string().allow(''),
+    img: Joi.string().allow('').custom((value, helpers) => {
+      // Cho phép URL hoặc base64 string
+      if (!value) return value;
+      if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('data:image/')) {
+        return value;
+      }
+      // Nếu là base64 thuần, thêm prefix
+      if (value.match(/^[A-Za-z0-9+/=]+$/)) {
+        return `data:image/png;base64,${value}`;
+      }
+      return value;
+    }),
   }),
 };
 
@@ -41,7 +52,18 @@ const updateInterestRate = {
       rate: Joi.number().min(0),
       minAmount: Joi.number().min(0),
       description: Joi.string().allow(''),
-      img: Joi.string().allow(''),
+      img: Joi.string().allow('').custom((value, helpers) => {
+        // Cho phép URL hoặc base64 string
+        if (!value) return value;
+        if (value.startsWith('http://') || value.startsWith('https://') || value.startsWith('data:image/')) {
+          return value;
+        }
+        // Nếu là base64 thuần, thêm prefix
+        if (value.match(/^[A-Za-z0-9+/=]+$/)) {
+          return `data:image/png;base64,${value}`;
+        }
+        return value;
+      }),
     })
     .min(1),
 };

@@ -51,9 +51,17 @@ const getMe = catchAsync(async (req, res) => {
   res.send(req.user);
 });
 
+const adminLogin = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await authService.loginAdminWithEmailAndPassword(email, password);
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.send({ user, tokens });
+});
+
 module.exports = {
   register,
   login,
+  adminLogin,
   logout,
   refreshTokens,
   forgotPassword,

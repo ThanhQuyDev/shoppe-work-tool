@@ -35,6 +35,7 @@ const interestRateSchema = mongoose.Schema(
     img: {
       type: String,
       trim: true,
+      // Có thể là URL hoặc base64 string
     },
   },
   {

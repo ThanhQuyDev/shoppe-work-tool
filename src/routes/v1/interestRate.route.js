@@ -80,7 +80,7 @@ module.exports = router;
  *                 description: Mo ta goi tiet kiem
  *               img:
  *                 type: string
- *                 description: URL hinh anh goi tiet kiem
+ *                 description: 'URL hinh anh hoac base64 string (data:image/png;base64,...)'
  *             example:
  *               name: Goi tiet kiem 12 thang
  *               duration: 12 thang
@@ -88,7 +88,7 @@ module.exports = router;
  *               rate: 6.5
  *               minAmount: 1000000
  *               description: Goi tiet kiem uu dai 12 thang voi lai suat cao
- *               img: https://example.com/image.jpg
+ *               img: data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==
  *     responses:
  *       "201":
  *         description: Created

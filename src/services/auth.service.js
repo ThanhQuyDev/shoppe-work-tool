@@ -20,6 +20,26 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 };
 
 /**
+ * Login admin with username and password
+ * Only users with role 'admin' can login
+ * @param {string} email
+ * @param {string} password
+ * @returns {Promise<User>}
+ */
+const loginAdminWithEmailAndPassword = async (email, password) => {
+  const user = await userService.getUserByEmail(email);
+  // Không tiết lộ thông tin về user tồn tại hay không, chỉ báo sai thông tin đăng nhập
+  if (!user || !(await user.isPasswordMatch(password))) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Sai thông tin đăng nhập');
+  }
+  // Kiểm tra role admin
+  if (user.role !== 'admin') {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'Sai thông tin đăng nhập');
+  }
+  return user;
+};
+
+/**
  * Logout
  * @param {string} refreshToken
  * @returns {Promise}
@@ -92,6 +112,7 @@ const verifyEmail = async (verifyEmailToken) => {
 
 module.exports = {
   loginUserWithEmailAndPassword,
+  loginAdminWithEmailAndPassword,
   logout,
   refreshAuth,
   resetPassword,

@@ -35,7 +35,7 @@ components:
           description: "Ky han gui tiet kiem (vi du: '10 thang', '12 thang')"
         durationAmount:
           type: number
-          description: So thang (vi du: 10, 12)
+          description: "So thang (vi du: 10, 12)"
         rate:
           type: number
           format: float
@@ -109,6 +109,97 @@ components:
         startDate: 2025-12-04T08:00:00.000Z
         maturityDate: 2026-12-04T08:00:00.000Z
         status: active
+
+    BankAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        user:
+          type: string
+        bankName:
+          type: string
+          description: Ten ngan hang
+        bankNumber:
+          type: string
+          description: So tai khoan ngan hang
+        userName:
+          type: string
+          description: Ten chu tai khoan
+      example:
+        id: 6750be1a954b54139806cabc
+        user: 5ebac534954b54139806c112
+        bankName: Vietcombank
+        bankNumber: "1234567890"
+        userName: NGUYEN VAN A
+
+    SystemBankAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        bankName:
+          type: string
+          description: Ten ngan hang cua he thong
+        bankNumber:
+          type: string
+          description: So tai khoan ngan hang cua he thong
+        userName:
+          type: string
+          description: Ten chu tai khoan (ten cong ty)
+      example:
+        id: 6750be1a954b54139806cabc
+        bankName: Vietcombank
+        bankNumber: "9876543210"
+        userName: CONG TY ABC
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        user:
+          type: string
+        type:
+          type: string
+          enum: [deposit, withdraw]
+          description: deposit = nap tien, withdraw = rut tien
+        amount:
+          type: number
+          description: So tien giao dich
+        bankName:
+          type: string
+          description: Ten ngan hang (lay tu bank account cua user)
+        bankNumber:
+          type: string
+          description: So tai khoan ngan hang
+        userName:
+          type: string
+          description: Ten chu tai khoan
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+        approvedBy:
+          type: string
+          description: ID admin duyet
+        rejectedBy:
+          type: string
+          description: ID admin tu choi
+        approvedAt:
+          type: string
+          format: date-time
+        rejectedAt:
+          type: string
+          format: date-time
+      example:
+        id: 6750be1a954b54139806cabc
+        user: 5ebac534954b54139806c112
+        type: deposit
+        amount: 1000000
+        bankName: Vietcombank
+        bankNumber: "1234567890"
+        userName: NGUYEN VAN A
+        status: pending
 
     Token:
       type: object

@@ -37,7 +37,7 @@ module.exports = router;
  * /transactions:
  *   post:
  *     summary: Tao yeu cau nap/rut tien
- *     description: User tao yeu cau nap hoac rut tien. Yeu cau se o trang thai pending cho den khi admin duyet.
+ *     description: User tao yeu cau nap hoac rut tien. Thong tin ngan hang se duoc lay tu tai khoan ngan hang da lien ket cua user. User phai lien ket tai khoan ngan hang truoc khi tao giao dich.
  *     tags: [Transactions]
  *     security:
  *       - bearerAuth: []
@@ -50,8 +50,6 @@ module.exports = router;
  *             required:
  *               - type
  *               - amount
- *               - accountNumber
- *               - accountName
  *             properties:
  *               type:
  *                 type: string
@@ -60,17 +58,9 @@ module.exports = router;
  *               amount:
  *                 type: number
  *                 description: So tien nap/rut
- *               accountNumber:
- *                 type: string
- *                 description: So tai khoan
- *               accountName:
- *                 type: string
- *                 description: Ho ten chu tai khoan
  *             example:
  *               type: deposit
  *               amount: 1000000
- *               accountNumber: 1234567890
- *               accountName: Nguyen Van A
  *     responses:
  *       "201":
  *         description: Created
@@ -79,7 +69,20 @@ module.exports = router;
  *             schema:
  *                $ref: '#/components/schemas/Transaction'
  *       "400":
- *         $ref: '#/components/responses/BadRequest'
+ *         description: Bad request (chua lien ket ngan hang hoac so du khong du)
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             examples:
+ *               noBankAccount:
+ *                 value:
+ *                   code: 400
+ *                   message: Please link your bank account first
+ *               insufficientBalance:
+ *                 value:
+ *                   code: 400
+ *                   message: Insufficient balance
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *
@@ -242,4 +245,3 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-

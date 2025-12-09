@@ -3,6 +3,8 @@ const authRoute = require('./auth.route');
 const userRoute = require('./user.route');
 const interestRateRoute = require('./interestRate.route');
 const savingRoute = require('./saving.route');
+const bankAccountRoute = require('./bankAccount.route');
+const systemBankAccountRoute = require('./systemBankAccount.route');
 const docsRoute = require('./docs.route');
 
 const router = express.Router();
@@ -23,6 +25,14 @@ const defaultRoutes = [
   {
     path: '/savings',
     route: savingRoute,
+  },
+  {
+    path: '/bank-accounts',
+    route: bankAccountRoute,
+  },
+  {
+    path: '/system-bank-account',
+    route: systemBankAccountRoute,
   },
 ];
 

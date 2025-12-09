@@ -4,9 +4,7 @@ const { objectId } = require('./custom.validation');
 const createTransaction = {
   body: Joi.object().keys({
     type: Joi.string().required().valid('deposit', 'withdraw'),
-    amount: Joi.number().required().min(0),
-    accountNumber: Joi.string().required(),
-    accountName: Joi.string().required(),
+    amount: Joi.number().required().min(1),
   }),
 };
 
@@ -46,4 +44,3 @@ module.exports = {
   approveTransaction,
   rejectTransaction,
 };
-

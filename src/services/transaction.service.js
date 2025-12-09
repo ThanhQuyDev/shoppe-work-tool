@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { Transaction, User } = require('../models');
+const { Transaction, User, BankAccount } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -9,19 +9,35 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<Transaction>}
  */
 const createTransaction = async (userId, transactionBody) => {
-  const user = await User.findById(userId);
+  const { type, amount } = transactionBody;
+
+  const [user, bankAccount] = await Promise.all([
+    User.findById(userId),
+    BankAccount.findOne({ user: userId }),
+  ]);
+
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
+  // Kiểm tra user đã liên kết tài khoản ngân hàng chưa
+  if (!bankAccount) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Please link your bank account first');
+  }
+
   // Kiểm tra số dư khi rút tiền
-  if (transactionBody.type === 'withdraw' && user.balance < transactionBody.amount) {
+  if (type === 'withdraw' && user.balance < amount) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance');
   }
 
   return Transaction.create({
-    ...transactionBody,
     user: userId,
+    type,
+    amount,
+    // Lấy thông tin ngân hàng từ bank account của user
+    bankName: bankAccount.bankName,
+    bankNumber: bankAccount.bankNumber,
+    userName: bankAccount.userName,
     status: 'pending',
   });
 };
@@ -118,4 +134,3 @@ module.exports = {
   approveTransaction,
   rejectTransaction,
 };
-

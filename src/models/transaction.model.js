@@ -18,12 +18,18 @@ const transactionSchema = mongoose.Schema(
       required: true,
       min: 0,
     },
-    accountNumber: {
+    // Snapshot thông tin ngân hàng tại thời điểm giao dịch
+    bankName: {
       type: String,
       required: true,
       trim: true,
     },
-    accountName: {
+    bankNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    userName: {
       type: String,
       required: true,
       trim: true,
@@ -63,4 +69,3 @@ transactionSchema.plugin(paginate);
 const Transaction = mongoose.model('Transaction', transactionSchema);
 
 module.exports = Transaction;
-

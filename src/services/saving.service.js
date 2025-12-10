@@ -73,6 +73,20 @@ const querySavings = async (filter, options) => {
 };
 
 /**
+ * Query all savings with user info (for admin)
+ * @param {Object} filter
+ * @param {Object} options
+ * @returns {Promise<QueryResult>}
+ */
+const querySavingsWithUser = async (filter, options) => {
+  const optionsWithPopulate = {
+    ...options,
+    populate: 'user',
+  };
+  return Saving.paginate(filter, optionsWithPopulate);
+};
+
+/**
  * Get saving by id
  * @param {ObjectId} savingId
  * @returns {Promise<Saving>}
@@ -84,5 +98,6 @@ const getSavingById = async (savingId) => {
 module.exports = {
   registerSaving,
   querySavings,
+  querySavingsWithUser,
   getSavingById,
 };

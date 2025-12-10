@@ -10,12 +10,18 @@ const registerSaving = catchAsync(async (req, res) => {
 });
 
 const getSavings = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['user']);
+  const filter = pick(req.query, ['user', 'status']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  if (req.user.role !== 'admin') {
+
+  let result;
+  if (req.user.role === 'admin') {
+    // Admin: lấy tất cả savings kèm thông tin user
+    result = await savingService.querySavingsWithUser(filter, options);
+  } else {
+    // User: chỉ lấy savings của mình
     filter.user = req.user.id;
+    result = await savingService.querySavings(filter, options);
   }
-  const result = await savingService.querySavings(filter, options);
   res.send(result);
 });
 

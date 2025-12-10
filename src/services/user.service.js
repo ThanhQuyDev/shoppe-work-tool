@@ -1,5 +1,5 @@
 const httpStatus = require('http-status');
-const { User } = require('../models');
+const { User, BankAccount } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 /**
@@ -15,7 +15,7 @@ const createUser = async (userBody) => {
 };
 
 /**
- * Query for users
+ * Query for users with bank account info
  * @param {Object} filter - Mongo filter
  * @param {Object} options - Query options
  * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
@@ -25,6 +25,24 @@ const createUser = async (userBody) => {
  */
 const queryUsers = async (filter, options) => {
   const users = await User.paginate(filter, options);
+
+  // Lấy thông tin bank account cho từng user
+  const userIds = users.results.map((user) => user.id);
+  const bankAccounts = await BankAccount.find({ user: { $in: userIds } });
+
+  // Map bank account theo user id
+  const bankAccountMap = {};
+  bankAccounts.forEach((account) => {
+    bankAccountMap[account.user.toString()] = account;
+  });
+
+  // Thêm bank account vào từng user
+  users.results = users.results.map((user) => {
+    const userObj = user.toJSON();
+    userObj.bankAccount = bankAccountMap[user.id] || null;
+    return userObj;
+  });
+
   return users;
 };
 
@@ -35,6 +53,24 @@ const queryUsers = async (filter, options) => {
  */
 const getUserById = async (id) => {
   return User.findById(id);
+};
+
+/**
+ * Get user by id with bank account
+ * @param {ObjectId} id
+ * @returns {Promise<Object>}
+ */
+const getUserByIdWithBankAccount = async (id) => {
+  const user = await User.findById(id);
+  if (!user) {
+    return null;
+  }
+
+  const bankAccount = await BankAccount.findOne({ user: id });
+  const userObj = user.toJSON();
+  userObj.bankAccount = bankAccount || null;
+
+  return userObj;
 };
 
 /**
@@ -83,6 +119,7 @@ module.exports = {
   createUser,
   queryUsers,
   getUserById,
+  getUserByIdWithBankAccount,
   getUserByEmail,
   updateUserById,
   deleteUserById,

@@ -1,6 +1,6 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../utils/catchAsync');
-const { authService, userService, tokenService, emailService } = require('../services');
+const { authService, userService, tokenService, emailService, bankAccountService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
@@ -48,7 +48,10 @@ const verifyEmail = catchAsync(async (req, res) => {
 });
 
 const getMe = catchAsync(async (req, res) => {
-  res.send(req.user);
+  const bankAccount = await bankAccountService.getBankAccountByUserId(req.user.id);
+  const userObj = req.user.toJSON();
+  userObj.bankAccount = bankAccount || null;
+  res.send(userObj);
 });
 
 const adminLogin = catchAsync(async (req, res) => {

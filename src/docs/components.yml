@@ -16,12 +16,30 @@ components:
         balance:
           type: number
           description: So du hien tai cua user
+        bankAccount:
+          type: object
+          nullable: true
+          description: Thong tin tai khoan ngan hang da lien ket (null neu chua lien ket)
+          properties:
+            id:
+              type: string
+            bankName:
+              type: string
+            bankNumber:
+              type: string
+            userName:
+              type: string
       example:
         id: 5ebac534954b54139806c112
         email: fake@example.com
         name: fake name
         role: user
         balance: 0
+        bankAccount:
+          id: 6750be1a954b54139806cabc
+          bankName: Vietcombank
+          bankNumber: "1234567890"
+          userName: NGUYEN VAN A
 
     InterestRate:
       type: object

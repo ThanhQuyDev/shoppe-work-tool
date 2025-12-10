@@ -12,6 +12,10 @@ router
   .get(auth(), validate(transactionValidation.getTransactions), transactionController.getTransactions);
 
 router
+  .route('/all')
+  .get(auth('manageTransactions'), validate(transactionValidation.getAllTransactions), transactionController.getAllTransactions);
+
+router
   .route('/:transactionId')
   .get(auth(), validate(transactionValidation.getTransaction), transactionController.getTransaction);
 
@@ -87,8 +91,8 @@ module.exports = router;
  *         $ref: '#/components/responses/Unauthorized'
  *
  *   get:
- *     summary: Xem lich su giao dich
- *     description: User chi xem duoc giao dich cua chinh minh. Admin co the xem tat ca hoac loc theo user.
+ *     summary: Xem lich su giao dich cua toi
+ *     description: User xem duoc lich su giao dich cua chinh minh.
  *     tags: [Transactions]
  *     security:
  *       - bearerAuth: []
@@ -105,11 +109,6 @@ module.exports = router;
  *           type: string
  *           enum: [pending, approved, rejected]
  *         description: Trang thai giao dich
- *       - in: query
- *         name: user
- *         schema:
- *           type: string
- *         description: Chi danh cho admin - ID cua user
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -147,6 +146,74 @@ module.exports = router;
  *                   type: integer
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
+ */
+
+/**
+ * @swagger
+ * /transactions/all:
+ *   get:
+ *     summary: Xem tat ca giao dich (Admin)
+ *     description: Chi admin moi duoc xem. Lay tat ca giao dich cua tat ca user, co the loc theo user, type, status.
+ *     tags: [Transactions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: user
+ *         schema:
+ *           type: string
+ *         description: Loc theo user ID
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           enum: [deposit, withdraw]
+ *         description: Loai giao dich
+ *       - in: query
+ *         name: status
+ *         schema:
+ *           type: string
+ *           enum: [pending, approved, rejected]
+ *         description: Trang thai giao dich
+ *       - in: query
+ *         name: sortBy
+ *         schema:
+ *           type: string
+ *         description: field:desc/asc
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Transaction'
+ *                 page:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 totalResults:
+ *                   type: integer
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */
 
 /**

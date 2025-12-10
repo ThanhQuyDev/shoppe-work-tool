@@ -10,12 +10,17 @@ const createTransaction = catchAsync(async (req, res) => {
 });
 
 const getTransactions = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['type', 'status', 'user']);
+  const filter = pick(req.query, ['type', 'status']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   // User chỉ xem được transaction của mình
-  if (req.user.role !== 'admin') {
-    filter.user = req.user.id;
-  }
+  filter.user = req.user.id;
+  const result = await transactionService.queryTransactions(filter, options);
+  res.send(result);
+});
+
+const getAllTransactions = catchAsync(async (req, res) => {
+  const filter = pick(req.query, ['type', 'status', 'user']);
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await transactionService.queryTransactions(filter, options);
   res.send(result);
 });
@@ -45,6 +50,7 @@ const rejectTransaction = catchAsync(async (req, res) => {
 module.exports = {
   createTransaction,
   getTransactions,
+  getAllTransactions,
   getTransaction,
   approveTransaction,
   rejectTransaction,

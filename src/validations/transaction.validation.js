@@ -12,6 +12,16 @@ const getTransactions = {
   query: Joi.object().keys({
     type: Joi.string().valid('deposit', 'withdraw'),
     status: Joi.string().valid('pending', 'approved', 'rejected'),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
+const getAllTransactions = {
+  query: Joi.object().keys({
+    type: Joi.string().valid('deposit', 'withdraw'),
+    status: Joi.string().valid('pending', 'approved', 'rejected'),
     user: Joi.string().custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
@@ -40,6 +50,7 @@ const rejectTransaction = {
 module.exports = {
   createTransaction,
   getTransactions,
+  getAllTransactions,
   getTransaction,
   approveTransaction,
   rejectTransaction,

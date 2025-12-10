@@ -30,6 +30,12 @@ const createTransaction = async (userId, transactionBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance');
   }
 
+  // Rút tiền: Trừ tiền ngay khi tạo request
+  if (type === 'withdraw') {
+    user.balance -= amount;
+    await user.save();
+  }
+
   return Transaction.create({
     user: userId,
     type,
@@ -92,22 +98,16 @@ const approveTransaction = async (transactionId, adminId) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Transaction is not pending');
   }
 
-  const user = await User.findById(transaction.user);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
-
-  // Cập nhật số dư
+  // Nạp tiền: Cộng tiền khi approve
+  // Rút tiền: Tiền đã bị trừ khi tạo request, chỉ cần đổi status
   if (transaction.type === 'deposit') {
-    user.balance += transaction.amount;
-  } else if (transaction.type === 'withdraw') {
-    if (user.balance < transaction.amount) {
-      throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance');
+    const user = await User.findById(transaction.user);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
-    user.balance -= transaction.amount;
+    user.balance += transaction.amount;
+    await user.save();
   }
-
-  await user.save();
 
   // Cập nhật transaction
   transaction.status = 'approved';
@@ -132,6 +132,16 @@ const rejectTransaction = async (transactionId, adminId) => {
 
   if (transaction.status !== 'pending') {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Transaction is not pending');
+  }
+
+  // Rút tiền: Hoàn tiền lại khi reject (vì đã trừ khi tạo request)
+  if (transaction.type === 'withdraw') {
+    const user = await User.findById(transaction.user);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
+    user.balance += transaction.amount;
+    await user.save();
   }
 
   transaction.status = 'rejected';

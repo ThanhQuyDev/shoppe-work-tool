@@ -53,6 +53,21 @@ const queryTransactions = async (filter, options) => {
 };
 
 /**
+ * Query all transactions with user info (for admin)
+ * @param {Object} filter
+ * @param {Object} options
+ * @returns {Promise<QueryResult>}
+ */
+const queryAllTransactionsWithUser = async (filter, options) => {
+  // Add populate option to include user info
+  const optionsWithPopulate = {
+    ...options,
+    populate: 'user',
+  };
+  return Transaction.paginate(filter, optionsWithPopulate);
+};
+
+/**
  * Get transaction by id
  * @param {ObjectId} transactionId
  * @returns {Promise<Transaction>}
@@ -130,6 +145,7 @@ const rejectTransaction = async (transactionId, adminId) => {
 module.exports = {
   createTransaction,
   queryTransactions,
+  queryAllTransactionsWithUser,
   getTransactionById,
   approveTransaction,
   rejectTransaction,

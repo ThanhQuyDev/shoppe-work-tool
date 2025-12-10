@@ -21,7 +21,7 @@ const getTransactions = catchAsync(async (req, res) => {
 const getAllTransactions = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['type', 'status', 'user']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await transactionService.queryTransactions(filter, options);
+  const result = await transactionService.queryAllTransactionsWithUser(filter, options);
   res.send(result);
 });
 

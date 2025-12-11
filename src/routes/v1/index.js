@@ -7,6 +7,8 @@ const bankAccountRoute = require('./bankAccount.route');
 const systemBankAccountRoute = require('./systemBankAccount.route');
 const transactionRoute = require('./transaction.route');
 const tradingViewRoute = require('./tradingView.route');
+const customCoinRoute = require('./customCoin.route');
+const coinOrderRoute = require('./coinOrder.route');
 const docsRoute = require('./docs.route');
 
 const router = express.Router();
@@ -43,6 +45,14 @@ const defaultRoutes = [
   {
     path: '/trading-view',
     route: tradingViewRoute,
+  },
+  {
+    path: '/custom-coins',
+    route: customCoinRoute,
+  },
+  {
+    path: '/coin-orders',
+    route: coinOrderRoute,
   },
 ];
 

@@ -6,3 +6,5 @@ module.exports.bankAccountController = require('./bankAccount.controller');
 module.exports.systemBankAccountController = require('./systemBankAccount.controller');
 module.exports.transactionController = require('./transaction.controller');
 module.exports.tradingViewController = require('./tradingView.controller');
+module.exports.customCoinController = require('./customCoin.controller');
+module.exports.coinOrderController = require('./coinOrder.controller');

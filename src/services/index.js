@@ -8,3 +8,5 @@ module.exports.bankAccountService = require('./bankAccount.service');
 module.exports.systemBankAccountService = require('./systemBankAccount.service');
 module.exports.transactionService = require('./transaction.service');
 module.exports.tradingViewService = require('./tradingView.service');
+module.exports.customCoinService = require('./customCoin.service');
+module.exports.coinOrderService = require('./coinOrder.service');

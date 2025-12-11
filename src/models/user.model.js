@@ -45,6 +45,11 @@ const userSchema = mongoose.Schema(
       default: 0,
       min: 0,
     },
+    wallet: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
     isEmailVerified: {
       type: Boolean,
       default: false,

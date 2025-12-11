@@ -219,6 +219,38 @@ components:
         userName: NGUYEN VAN A
         status: pending
 
+    CustomCoin:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Ten dong coin
+        symbol:
+          type: string
+          description: Ma dong coin (unique)
+        binanceSymbol:
+          type: string
+          description: Ma cap giao dich tren Binance de neo gia
+        description:
+          type: string
+          description: Mo ta dong coin
+        img:
+          type: string
+          description: URL hinh anh dong coin
+        isActive:
+          type: boolean
+          description: Trang thai hoat dong
+      example:
+        id: 6750be1a954b54139806cabc
+        name: Bitcoin Clone
+        symbol: BTCC
+        binanceSymbol: BTCUSDT
+        description: Dong coin neo theo gia Bitcoin
+        img: https://example.com/btcc.png
+        isActive: true
+
     Token:
       type: object
       properties:

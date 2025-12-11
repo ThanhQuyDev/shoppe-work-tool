@@ -6,3 +6,5 @@ module.exports.bankAccountValidation = require('./bankAccount.validation');
 module.exports.systemBankAccountValidation = require('./systemBankAccount.validation');
 module.exports.transactionValidation = require('./transaction.validation');
 module.exports.tradingViewValidation = require('./tradingView.validation');
+module.exports.customCoinValidation = require('./customCoin.validation');
+module.exports.coinOrderValidation = require('./coinOrder.validation');

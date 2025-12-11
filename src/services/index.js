@@ -7,3 +7,4 @@ module.exports.savingService = require('./saving.service');
 module.exports.bankAccountService = require('./bankAccount.service');
 module.exports.systemBankAccountService = require('./systemBankAccount.service');
 module.exports.transactionService = require('./transaction.service');
+module.exports.tradingViewService = require('./tradingView.service');

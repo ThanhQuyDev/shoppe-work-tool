@@ -6,6 +6,7 @@ const savingRoute = require('./saving.route');
 const bankAccountRoute = require('./bankAccount.route');
 const systemBankAccountRoute = require('./systemBankAccount.route');
 const transactionRoute = require('./transaction.route');
+const tradingViewRoute = require('./tradingView.route');
 const docsRoute = require('./docs.route');
 
 const router = express.Router();
@@ -38,6 +39,10 @@ const defaultRoutes = [
   {
     path: '/transactions',
     route: transactionRoute,
+  },
+  {
+    path: '/trading-view',
+    route: tradingViewRoute,
   },
 ];
 

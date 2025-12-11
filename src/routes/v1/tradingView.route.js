@@ -1,0 +1,86 @@
+const express = require('express');
+const validate = require('../../middlewares/validate');
+const tradingViewValidation = require('../../validations/tradingView.validation');
+const tradingViewController = require('../../controllers/tradingView.controller');
+
+const router = express.Router();
+
+router.route('/klines').get(validate(tradingViewValidation.getKlines), tradingViewController.getKlines);
+
+module.exports = router;
+
+/**
+ * @swagger
+ * tags:
+ *   name: TradingView
+ *   description: API lay du lieu bieu do TradingView tu Binance
+ */
+
+/**
+ * @swagger
+ * /trading-view/klines:
+ *   get:
+ *     summary: Lay du lieu klines tu Binance
+ *     description: Lay du lieu nen (candlestick) de hien thi tren TradingView.
+ *     tags: [TradingView]
+ *     parameters:
+ *       - in: query
+ *         name: symbol
+ *         schema:
+ *           type: string
+ *           default: BTCUSDT
+ *         description: Cap giao dich (vi du BTCUSDT, ETHUSDT, BNBUSDT)
+ *       - in: query
+ *         name: interval
+ *         schema:
+ *           type: string
+ *           enum: [1m, 3m, 5m, 15m, 30m, 1h, 2h, 4h, 6h, 8h, 12h, 1d, 3d, 1w, 1M]
+ *           default: 1h
+ *         description: Khung thoi gian
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 200
+ *           minimum: 1
+ *           maximum: 1000
+ *         description: So luong nen tra ve (toi da 1000)
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   time:
+ *                     type: integer
+ *                     description: Unix timestamp (seconds)
+ *                   open:
+ *                     type: number
+ *                     description: Gia mo cua
+ *                   high:
+ *                     type: number
+ *                     description: Gia cao nhat
+ *                   low:
+ *                     type: number
+ *                     description: Gia thap nhat
+ *                   close:
+ *                     type: number
+ *                     description: Gia dong cua
+ *                   volume:
+ *                     type: number
+ *                     description: Khoi luong giao dich
+ *             example:
+ *               - time: 1702296000
+ *                 open: 43500.5
+ *                 high: 43800.0
+ *                 low: 43400.0
+ *                 close: 43750.25
+ *                 volume: 1234.56
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ */
+

@@ -5,3 +5,4 @@ module.exports.savingController = require('./saving.controller');
 module.exports.bankAccountController = require('./bankAccount.controller');
 module.exports.systemBankAccountController = require('./systemBankAccount.controller');
 module.exports.transactionController = require('./transaction.controller');
+module.exports.tradingViewController = require('./tradingView.controller');

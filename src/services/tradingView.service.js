@@ -15,14 +15,17 @@ const USE_EXAMPLE_DATA = true;
  * @returns {Array}
  */
 const transformKlines = (rawData, limit) => {
-  const data = rawData.slice(0, limit).map((candle) => ({
-    time: Math.floor(candle[0] / 1000),
-    open: Number(candle[1]),
-    high: Number(candle[2]),
-    low: Number(candle[3]),
-    close: Number(candle[4]),
-    volume: Number(candle[5]),
-  }));
+  const data = rawData
+    .slice(-limit) // Lấy limit phần tử cuối cùng (mới nhất)
+    .map((candle) => ({
+      time: Math.floor(candle[0] / 1000),
+      open: Number(candle[1]),
+      high: Number(candle[2]),
+      low: Number(candle[3]),
+      close: Number(candle[4]),
+      volume: Number(candle[5]),
+    }))
+    .reverse(); // Đảo ngược để mới nhất ở đầu
   return data;
 };
 

@@ -1,16 +1,30 @@
 const httpStatus = require('http-status');
 const { CoinOrder, CustomCoin, User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const tradingViewExample = require('../example/trading-view.json');
 
 const BINANCE_API_URL = 'https://api.binance.com/api/v3/klines';
 
+// Set to true to use example data instead of Binance API
+const USE_EXAMPLE_DATA = true;
+
 /**
- * Get current price from Binance
+ * Get current price from Binance or example data
  * @param {string} binanceSymbol
  * @returns {Promise<number>}
  */
 const getCurrentPrice = async (binanceSymbol) => {
   try {
+    if (USE_EXAMPLE_DATA) {
+      // Lấy giá close của nến cuối cùng trong example data
+      if (tradingViewExample.length === 0) {
+        throw new ApiError(httpStatus.BAD_REQUEST, 'No price data available');
+      }
+      const lastCandle = tradingViewExample[tradingViewExample.length - 1];
+      return Number(lastCandle[4]); // close price
+    }
+
+    // Gọi Binance API
     const url = `${BINANCE_API_URL}?symbol=${binanceSymbol}&interval=1m&limit=1`;
     const response = await fetch(url);
 
@@ -229,4 +243,3 @@ module.exports = {
   getUserWallet,
   getCurrentPrice,
 };
-

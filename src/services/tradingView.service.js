@@ -27,11 +27,12 @@ const getKlines = async (coinSymbol, interval, limit) => {
   try {
     // Sử dụng binanceSymbol của custom coin để gọi Binance API
     const url = `${BINANCE_API_URL}?symbol=${customCoin.binanceSymbol}&interval=${interval}&limit=${limit}`;
-    const response = await fetch(url);
+    let response = await fetch(url);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
+      response = tradingViewExample;
+      // const errorData = await response.json();
+      // throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
     }
 
     const rawData = await response.json();

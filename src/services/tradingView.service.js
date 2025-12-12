@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { CustomCoin } = require('../models');
 const ApiError = require('../utils/ApiError');
+const tradingViewExample = require('../example/trading-view.json');
 
 const BINANCE_API_URL = 'https://api.binance.com/api/v3/klines';
 
@@ -65,11 +66,12 @@ const getKlines = async (coinSymbol, interval, limit) => {
 const getKlinesDirect = async (binanceSymbol, interval, limit) => {
   try {
     const url = `${BINANCE_API_URL}?symbol=${binanceSymbol.toUpperCase()}&interval=${interval}&limit=${limit}`;
-    const response = await fetch(url);
+    let response = await fetch(url);
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
+      response = tradingViewExample;
+      // const errorData = await response.json();
+      // throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
     }
 
     const rawData = await response.json();

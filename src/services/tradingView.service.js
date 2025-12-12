@@ -26,13 +26,14 @@ const getKlines = async (coinSymbol, interval, limit) => {
 
   try {
     // Sử dụng binanceSymbol của custom coin để gọi Binance API
-    const url = `${BINANCE_API_URL}?symbol=${customCoin.binanceSymbol}&interval=${interval}&limit=${limit}`;
-    let response = await fetch(url);
+    // const url = `${BINANCE_API_URL}?symbol=${customCoin.binanceSymbol}&interval=${interval}&limit=${limit}`;
+    // const response = await fetch(url);
+    const response = tradingViewExample;
+
 
     if (!response.ok) {
-      response = tradingViewExample;
-      // const errorData = await response.json();
-      // throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
+      const errorData = await response.json();
+      throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
     }
 
     const rawData = await response.json();
@@ -66,13 +67,13 @@ const getKlines = async (coinSymbol, interval, limit) => {
  */
 const getKlinesDirect = async (binanceSymbol, interval, limit) => {
   try {
-    const url = `${BINANCE_API_URL}?symbol=${binanceSymbol.toUpperCase()}&interval=${interval}&limit=${limit}`;
-    let response = await fetch(url);
+    // const url = `${BINANCE_API_URL}?symbol=${binanceSymbol.toUpperCase()}&interval=${interval}&limit=${limit}`;
+    // let response = await fetch(url);
+    const response = tradingViewExample;
 
     if (!response.ok) {
-      response = tradingViewExample;
-      // const errorData = await response.json();
-      // throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
+      const errorData = await response.json();
+      throw new ApiError(response.status, errorData.msg || 'Failed to fetch data from Binance');
     }
 
     const rawData = await response.json();

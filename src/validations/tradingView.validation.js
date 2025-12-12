@@ -20,7 +20,14 @@ const getKlinesDirect = {
   }),
 };
 
+const getCurrentBar = {
+  query: Joi.object().keys({
+    symbol: Joi.string().required().uppercase(),
+  }),
+};
+
 module.exports = {
   getKlines,
   getKlinesDirect,
+  getCurrentBar,
 };

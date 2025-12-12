@@ -72,8 +72,6 @@ module.exports = router;
  *                   type: string
  *                 symbol:
  *                   type: string
- *                 binanceSymbol:
- *                   type: string
  *                 type:
  *                   type: string
  *                 amount:
@@ -90,7 +88,6 @@ module.exports = router;
  *               id: "6750be1a954b54139806cabc"
  *               user: "5ebac534954b54139806c112"
  *               symbol: "BTCC"
- *               binanceSymbol: "BTCUSDT"
  *               type: "buy"
  *               amount: 0.5
  *               price: 43500.25
@@ -178,8 +175,6 @@ module.exports = router;
  *                         type: string
  *                       coinName:
  *                         type: string
- *                       binanceSymbol:
- *                         type: string
  *                       img:
  *                         type: string
  *                       amount:
@@ -196,7 +191,6 @@ module.exports = router;
  *               wallet:
  *                 - symbol: "BTCC"
  *                   coinName: "Bitcoin Clone"
- *                   binanceSymbol: "BTCUSDT"
  *                   img: "https://example.com/btcc.png"
  *                   amount: 0.5
  *                   currentPrice: 43500.25

@@ -101,12 +101,12 @@ const approveTransaction = async (transactionId, adminId) => {
   // Nạp tiền: Cộng tiền khi approve
   // Rút tiền: Tiền đã bị trừ khi tạo request, chỉ cần đổi status
   if (transaction.type === 'deposit') {
-    const user = await User.findById(transaction.user);
-    if (!user) {
-      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-    }
+  const user = await User.findById(transaction.user);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
     user.balance += transaction.amount;
-    await user.save();
+  await user.save();
   }
 
   // Cập nhật transaction

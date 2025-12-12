@@ -26,7 +26,23 @@ const getKlinesDirect = catchAsync(async (req, res) => {
   res.send(data);
 });
 
+/**
+ * Get current bar (delayed 30 min) for real-time chart update
+ * FE dùng useEffect polling API này mỗi 1-5 giây để cập nhật chart
+ */
+const getCurrentBar = catchAsync(async (req, res) => {
+  const { symbol } = req.query;
+
+  if (!symbol) {
+    throw new ApiError(httpStatus.BAD_REQUEST, 'Symbol is required');
+  }
+
+  const bar = await tradingViewService.getCurrentBar(symbol);
+  res.send(bar);
+});
+
 module.exports = {
   getKlines,
   getKlinesDirect,
+  getCurrentBar,
 };

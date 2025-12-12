@@ -19,6 +19,7 @@ const coinOrderSchema = mongoose.Schema(
       required: true,
       uppercase: true,
       trim: true,
+      private: true, // Ẩn khỏi API response
     },
     type: {
       type: String,

@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.route('/klines').get(validate(tradingViewValidation.getKlines), tradingViewController.getKlines);
 router.route('/klines/direct').get(validate(tradingViewValidation.getKlinesDirect), tradingViewController.getKlinesDirect);
+router.route('/current-bar').get(validate(tradingViewValidation.getCurrentBar), tradingViewController.getCurrentBar);
 
 module.exports = router;
 
@@ -52,55 +53,30 @@ module.exports = router;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 coin:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     name:
- *                       type: string
- *                     symbol:
- *                       type: string
- *                     binanceSymbol:
- *                       type: string
- *                     description:
- *                       type: string
- *                     img:
- *                       type: string
- *                 klines:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       time:
- *                         type: integer
- *                       open:
- *                         type: number
- *                       high:
- *                         type: number
- *                       low:
- *                         type: number
- *                       close:
- *                         type: number
- *                       volume:
- *                         type: number
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   time:
+ *                     type: integer
+ *                     description: Unix timestamp (seconds)
+ *                   open:
+ *                     type: number
+ *                   high:
+ *                     type: number
+ *                   low:
+ *                     type: number
+ *                   close:
+ *                     type: number
+ *                   volume:
+ *                     type: number
  *             example:
- *               coin:
- *                 id: "6750be1a954b54139806cabc"
- *                 name: "Bitcoin Clone"
- *                 symbol: "BTCC"
- *                 binanceSymbol: "BTCUSDT"
- *                 description: "Dong coin neo theo gia Bitcoin"
- *                 img: "https://example.com/btcc.png"
- *               klines:
- *                 - time: 1702296000
- *                   open: 43500.5
- *                   high: 43800.0
- *                   low: 43400.0
- *                   close: 43750.25
- *                   volume: 1234.56
+ *               - time: 1702296000
+ *                 open: 43500.5
+ *                 high: 43800.0
+ *                 low: 43400.0
+ *                 close: 43750.25
+ *                 volume: 1234.56
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "404":
@@ -173,4 +149,53 @@ module.exports = router;
  *                 volume: 1234.56
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
+ */
+
+/**
+ * @swagger
+ * /trading-view/current-bar:
+ *   get:
+ *     summary: Lay gia hien tai de cap nhat chart real-time
+ *    
+ *     tags: [TradingView]
+ *     parameters:
+ *       - in: query
+ *         name: symbol
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Ma custom coin (vi du BTCC)
+ *     responses:
+ *       "200":
+ *         description: OK
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 time:
+ *                   type: integer
+ *                   description: Unix timestamp (seconds) 
+ *                 open:
+ *                   type: number
+ *                 high:
+ *                   type: number
+ *                 low:
+ *                   type: number
+ *                 close:
+ *                   type: number
+ *                   description: Gia hien tai (delayed 30 phut) - dung de hien thi tren chart
+ *                 volume:
+ *                   type: number
+ *             example:
+ *               time: 1702296000
+ *               open: 43500.5
+ *               high: 43800.0
+ *               low: 43400.0
+ *               close: 43750.25
+ *               volume: 1234.56
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ *       "404":
+ *         description: Custom coin not found
  */

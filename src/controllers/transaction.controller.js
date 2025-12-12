@@ -13,7 +13,7 @@ const getTransactions = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['type', 'status']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   // User chỉ xem được transaction của mình
-  filter.user = req.user.id;
+    filter.user = req.user.id;
   const result = await transactionService.queryTransactions(filter, options);
   res.send(result);
 });

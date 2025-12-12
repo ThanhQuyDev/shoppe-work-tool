@@ -20,6 +20,7 @@ const customCoinSchema = mongoose.Schema(
       required: true,
       trim: true,
       uppercase: true,
+      private: true, // Ẩn khỏi API response
     },
     description: {
       type: String,

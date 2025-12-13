@@ -91,7 +91,7 @@ const sellCoin = async (userId, orderBody) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient coin balance');
   }
 
-  const price = await getCurrentPrice(customCoin.binanceSymbol);
+  const price = await getCurrentPrice(symbol.toUpperCase());
   const total = amount * price;
 
   user.balance += total;

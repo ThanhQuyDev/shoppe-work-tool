@@ -35,6 +35,15 @@ const updateUser = {
       email: Joi.string().email(),
       password: Joi.string().custom(password),
       name: Joi.string(),
+      role: Joi.string().valid('user', 'admin'),
+      balance: Joi.number().min(0),
+      bankAccount: Joi.object()
+        .keys({
+          bankName: Joi.string(),
+          bankNumber: Joi.string(),
+          userName: Joi.string(),
+        })
+        .min(1),
     })
     .min(1),
 };

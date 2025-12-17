@@ -86,7 +86,7 @@ const getUserByEmail = async (email) => {
  * Update user by id
  * @param {ObjectId} userId
  * @param {Object} updateBody
- * @returns {Promise<User>}
+ * @returns {Promise<Object>} user with bankAccount
  */
 const updateUserById = async (userId, updateBody) => {
   const user = await getUserById(userId);
@@ -96,9 +96,29 @@ const updateUserById = async (userId, updateBody) => {
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  Object.assign(user, updateBody);
+  const { bankAccount, ...userData } = updateBody;
+
+  Object.assign(user, userData);
   await user.save();
-  return user;
+
+  if (bankAccount) {
+    let userBankAccount = await BankAccount.findOne({ user: userId });
+    if (!userBankAccount) {
+      userBankAccount = await BankAccount.create({
+        user: userId,
+        bankName: bankAccount.bankName,
+        bankNumber: bankAccount.bankNumber,
+        userName: bankAccount.userName,
+      });
+    } else {
+      if (bankAccount.bankName !== undefined) userBankAccount.bankName = bankAccount.bankName;
+      if (bankAccount.bankNumber !== undefined) userBankAccount.bankNumber = bankAccount.bankNumber;
+      if (bankAccount.userName !== undefined) userBankAccount.userName = bankAccount.userName;
+      await userBankAccount.save();
+    }
+  }
+
+  return getUserByIdWithBankAccount(userId);
 };
 
 /**

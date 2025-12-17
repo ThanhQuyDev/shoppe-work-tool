@@ -178,7 +178,7 @@ module.exports = router;
  *
  *   patch:
  *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
+ *     description: Admins can update user information, including role, balance and bank account.
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -207,10 +207,30 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
+ *               role:
+ *                 type: string
+ *                 enum: [user, admin]
+ *               balance:
+ *                 type: number
+ *                 minimum: 0
+ *               bankAccount:
+ *                 type: object
+ *                 properties:
+ *                   bankName:
+ *                     type: string
+ *                   bankNumber:
+ *                     type: string
+ *                   userName:
+ *                     type: string
  *             example:
- *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               email: dev1008@gmail.com
+ *               name: sondev
+ *               role: user
+ *               balance: 90000
+ *               bankAccount:
+ *                 bankName: Vietcombank
+ *                 bankNumber: 04111613401
+ *                 userName: Nguyen Van Hau
  *     responses:
  *       "200":
  *         description: OK

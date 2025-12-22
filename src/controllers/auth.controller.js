@@ -3,7 +3,12 @@ const catchAsync = require('../utils/catchAsync');
 const { authService, userService, tokenService, emailService, bankAccountService } = require('../services');
 
 const register = catchAsync(async (req, res) => {
-  const user = await userService.createUser(req.body);
+  const clientIp = (req.headers['x-forwarded-for'] && req.headers['x-forwarded-for'].split(',')[0].trim()) || req.ip || null;
+
+  const user = await userService.createUser({
+    ...req.body,
+    ipAddress: clientIp,
+  });
   const tokens = await tokenService.generateAuthTokens(user);
   res.status(httpStatus.CREATED).send({ user, tokens });
 });

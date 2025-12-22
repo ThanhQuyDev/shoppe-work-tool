@@ -5,6 +5,8 @@ components:
       properties:
         id:
           type: string
+        ipAddress:
+          type: string
         email:
           type: string
           format: email
@@ -31,6 +33,7 @@ components:
               type: string
       example:
         id: 5ebac534954b54139806c112
+        ipAddress: 127.0.0.1
         email: fake@example.com
         name: fake name
         role: user

@@ -11,6 +11,10 @@ const userSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    ipAddress: {
+      type: String,
+      trim: true,
+    },
     email: {
       type: String,
       required: true,

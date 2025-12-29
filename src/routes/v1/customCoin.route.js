@@ -9,7 +9,7 @@ const router = express.Router();
 router
   .route('/')
   .post(auth('manageUsers'), validate(customCoinValidation.createCustomCoin), customCoinController.createCustomCoin)
-  .get(validate(customCoinValidation.getCustomCoins), customCoinController.getCustomCoins);
+  .get(auth('manageUsers'), validate(customCoinValidation.getCustomCoins), customCoinController.getCustomCoins);
 
 router.route('/active').get(customCoinController.getActiveCoins);
 router.route('/stocks').get(customCoinController.getListStocks);
@@ -88,9 +88,11 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Lay danh sach dong coin
- *     description: Lay danh sach tat ca dong coin tuy chinh.
+ *     summary: Lay danh sach dong coin (Admin)
+ *     description: Lay danh sach tat ca dong coin tuy chinh (chi admin, hien thi binanceSymbol).
  *     tags: [CustomCoins]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: name
@@ -180,8 +182,11 @@ module.exports = router;
  * @swagger
  * /custom-coins/{id}:
  *   get:
- *     summary: Xem chi tiet dong coin
+ *     summary: Xem chi tiet dong coin (Admin)
+ *     description: Xem chi tiet dong coin (chi admin, hien thi binanceSymbol).
  *     tags: [CustomCoins]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

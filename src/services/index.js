@@ -10,3 +10,4 @@ module.exports.transactionService = require('./transaction.service');
 module.exports.tradingViewService = require('./tradingView.service');
 module.exports.customCoinService = require('./customCoin.service');
 module.exports.coinOrderService = require('./coinOrder.service');
+module.exports.stockService = require('./stock.service');

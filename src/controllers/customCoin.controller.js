@@ -6,13 +6,16 @@ const { customCoinService } = require('../services');
 
 const createCustomCoin = catchAsync(async (req, res) => {
   const coin = await customCoinService.createCustomCoin(req.body);
-  res.status(httpStatus.CREATED).send(coin);
+  // Include binanceSymbol for admin
+  const coinJson = coin.toJSON ? coin.toJSON() : coin;
+  coinJson.binanceSymbol = coin.binanceSymbol;
+  res.status(httpStatus.CREATED).send(coinJson);
 });
 
 const getCustomCoins = catchAsync(async (req, res) => {
   const filter = pick(req.query, ['name', 'symbol', 'binanceSymbol', 'isActive']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
-  const result = await customCoinService.queryCustomCoins(filter, options);
+  const result = await customCoinService.queryCustomCoins(filter, options, true); // true = includeBinanceSymbol for admin
   res.send(result);
 });
 const getListStocks = catchAsync(async (req, res) => {
@@ -21,7 +24,7 @@ const getListStocks = catchAsync(async (req, res) => {
 });
 
 const getCustomCoin = catchAsync(async (req, res) => {
-  const coin = await customCoinService.getCustomCoinById(req.params.coinId);
+  const coin = await customCoinService.getCustomCoinById(req.params.coinId, true); // true = includeBinanceSymbol for admin
   if (!coin) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Custom coin not found');
   }
@@ -30,7 +33,10 @@ const getCustomCoin = catchAsync(async (req, res) => {
 
 const updateCustomCoin = catchAsync(async (req, res) => {
   const coin = await customCoinService.updateCustomCoinById(req.params.coinId, req.body);
-  res.send(coin);
+  // Include binanceSymbol for admin
+  const coinJson = coin.toJSON ? coin.toJSON() : coin;
+  coinJson.binanceSymbol = coin.binanceSymbol;
+  res.send(coinJson);
 });
 
 const deleteCustomCoin = catchAsync(async (req, res) => {

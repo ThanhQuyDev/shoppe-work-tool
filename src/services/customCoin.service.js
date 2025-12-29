@@ -18,10 +18,21 @@ const createCustomCoin = async (coinBody) => {
  * Query custom coins
  * @param {Object} filter
  * @param {Object} options
+ * @param {boolean} includeBinanceSymbol - Whether to include binanceSymbol in response
  * @returns {Promise<QueryResult>}
  */
-const queryCustomCoins = async (filter, options) => {
-  return CustomCoin.paginate(filter, options);
+const queryCustomCoins = async (filter, options, includeBinanceSymbol = false) => {
+  const result = await CustomCoin.paginate(filter, options);
+  if (includeBinanceSymbol && result.results) {
+    // Manually add binanceSymbol to each result since it's marked as private
+    result.results = result.results.map((coin) => {
+      const coinJson = coin.toJSON ? coin.toJSON() : coin;
+      // Get binanceSymbol from the original document
+      coinJson.binanceSymbol = coin.binanceSymbol;
+      return coinJson;
+    });
+  }
+  return result;
 };
 const getListStocks = async () => {
   const stocks = await CustomCoin.find({ isActive: true });
@@ -37,10 +48,21 @@ const getListStocks = async () => {
 /**
  * Get custom coin by id
  * @param {ObjectId} id
+ * @param {boolean} includeBinanceSymbol - Whether to include binanceSymbol in response
  * @returns {Promise<CustomCoin>}
  */
-const getCustomCoinById = async (id) => {
-  return CustomCoin.findById(id);
+const getCustomCoinById = async (id, includeBinanceSymbol = false) => {
+  const coin = await CustomCoin.findById(id);
+  if (!coin) {
+    return null;
+  }
+  if (includeBinanceSymbol) {
+    // Convert to JSON and manually add binanceSymbol since it's marked as private
+    const coinJson = coin.toJSON();
+    coinJson.binanceSymbol = coin.binanceSymbol;
+    return coinJson;
+  }
+  return coin;
 };
 
 /**

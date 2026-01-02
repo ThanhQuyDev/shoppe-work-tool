@@ -11,6 +11,7 @@ const customCoinRoute = require('./customCoin.route');
 const coinOrderRoute = require('./coinOrder.route');
 const stockRoute = require('./stock.route');
 const giftRoute = require('./gift.route');
+const giftExchangeRoute = require('./giftExchange.route');
 const referralRoute = require('./referral.route');
 const docsRoute = require('./docs.route');
 
@@ -64,6 +65,10 @@ const defaultRoutes = [
   {
     path: '/gifts',
     route: giftRoute,
+  },
+  {
+    path: '/gift-exchanges',
+    route: giftExchangeRoute,
   },
   {
     path: '/referral',

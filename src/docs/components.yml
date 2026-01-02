@@ -289,6 +289,60 @@ components:
         isActive: true
         img: https://example.com/voucher.png
 
+    GiftExchange:
+      type: object
+      properties:
+        id:
+          type: string
+        user:
+          type: string
+          description: ID cua user doi qua
+        gift:
+          type: string
+          description: ID cua qua tang
+        pointsUsed:
+          type: number
+          description: So diem da su dung
+        giftSnapshot:
+          type: object
+          description: Snapshot thong tin qua tang tai thoi diem doi
+          properties:
+            name:
+              type: string
+            description:
+              type: string
+            pointsRequired:
+              type: number
+            img:
+              type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+          description: Trang thai yeu cau
+        approvedBy:
+          type: string
+          description: ID admin duyet
+        rejectedBy:
+          type: string
+          description: ID admin tu choi
+        approvedAt:
+          type: string
+          format: date-time
+        rejectedAt:
+          type: string
+          format: date-time
+      example:
+        id: 6750be1a954b54139806cxyz
+        user: 5ebac534954b54139806c112
+        gift: 6750be1a954b54139806cdef
+        pointsUsed: 1000
+        giftSnapshot:
+          name: Voucher 100k
+          description: Voucher giam gia 100k
+          pointsRequired: 1000
+          img: https://example.com/voucher.png
+        status: pending
+
     Token:
       type: object
       properties:

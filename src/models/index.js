@@ -8,3 +8,4 @@ module.exports.SystemBankAccount = require('./systemBankAccount.model');
 module.exports.CustomCoin = require('./customCoin.model');
 module.exports.CoinOrder = require('./coinOrder.model');
 module.exports.Gift = require('./gift.model');
+module.exports.GiftExchange = require('./giftExchange.model');

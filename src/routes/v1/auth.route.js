@@ -54,10 +54,14 @@ module.exports = router;
  *                 format: password
  *                 minLength: 8
  *                 description: At least one number and one letter
+ *               referredBy:
+ *                 type: string
+ *                 description: ID cua nguoi gioi thieu (optional)
  *             example:
  *               name: fake name
  *               email: fake@example.com
  *               password: password1
+ *               referredBy: 5ebac534954b54139806c112
  *     responses:
  *       "201":
  *         description: Created

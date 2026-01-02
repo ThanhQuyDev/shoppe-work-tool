@@ -11,6 +11,19 @@ const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
+
+  // Validate referredBy if provided
+  if (userBody.referredBy) {
+    const referrer = await User.findById(userBody.referredBy);
+    if (!referrer) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Referrer not found');
+    }
+    // Prevent self-referral
+    if (userBody.referredBy === userBody._id) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot refer yourself');
+    }
+  }
+
   return User.create(userBody);
 };
 

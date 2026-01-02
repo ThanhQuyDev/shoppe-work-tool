@@ -11,3 +11,5 @@ module.exports.tradingViewService = require('./tradingView.service');
 module.exports.customCoinService = require('./customCoin.service');
 module.exports.coinOrderService = require('./coinOrder.service');
 module.exports.stockService = require('./stock.service');
+module.exports.giftService = require('./gift.service');
+module.exports.referralService = require('./referral.service');

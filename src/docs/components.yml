@@ -18,6 +18,14 @@ components:
         balance:
           type: number
           description: So du hien tai cua user
+        points:
+          type: number
+          description: Diem thuong tu he thong gioi thieu
+          default: 0
+        isActivated:
+          type: boolean
+          description: Trang thai kich hoat tai khoan (da dang ky va nap tien)
+          default: false
         bankAccount:
           type: object
           nullable: true
@@ -38,6 +46,8 @@ components:
         name: fake name
         role: user
         balance: 0
+        points: 2.5
+        isActivated: true
         bankAccount:
           id: 6750be1a954b54139806cabc
           bankName: Vietcombank
@@ -249,6 +259,35 @@ components:
         description: Dong coin neo theo gia Bitcoin
         img: https://example.com/btcc.png
         isActive: true
+
+    Gift:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Ten qua tang
+        description:
+          type: string
+          description: Mo ta qua tang
+        pointsRequired:
+          type: integer
+          description: So diem can de doi
+          minimum: 0
+        isActive:
+          type: boolean
+          description: Trang thai hoat dong
+        img:
+          type: string
+          description: URL hinh anh qua tang
+      example:
+        id: 6750be1a954b54139806cdef
+        name: Voucher 100k
+        description: Voucher giam gia 100k
+        pointsRequired: 1000
+        isActive: true
+        img: https://example.com/voucher.png
 
     Token:
       type: object

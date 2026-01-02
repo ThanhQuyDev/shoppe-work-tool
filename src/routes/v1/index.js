@@ -10,6 +10,8 @@ const tradingViewRoute = require('./tradingView.route');
 const customCoinRoute = require('./customCoin.route');
 const coinOrderRoute = require('./coinOrder.route');
 const stockRoute = require('./stock.route');
+const giftRoute = require('./gift.route');
+const referralRoute = require('./referral.route');
 const docsRoute = require('./docs.route');
 
 const router = express.Router();
@@ -58,6 +60,14 @@ const defaultRoutes = [
   {
     path: '/stocks',
     route: stockRoute,
+  },
+  {
+    path: '/gifts',
+    route: giftRoute,
+  },
+  {
+    path: '/referral',
+    route: referralRoute,
   },
 ];
 

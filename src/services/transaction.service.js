@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const { Transaction, User, BankAccount } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { referralService } = require('./referral.service');
 
 /**
  * Create a transaction (deposit or withdraw)
@@ -101,12 +102,17 @@ const approveTransaction = async (transactionId, adminId) => {
   // Nạp tiền: Cộng tiền khi approve
   // Rút tiền: Tiền đã bị trừ khi tạo request, chỉ cần đổi status
   if (transaction.type === 'deposit') {
-  const user = await User.findById(transaction.user);
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
-  }
+    const user = await User.findById(transaction.user);
+    if (!user) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+    }
     user.balance += transaction.amount;
-  await user.save();
+    await user.save();
+
+    // Activate user and award referral points if this is first deposit
+    if (!user.isActivated) {
+      await referralService.activateUserAndAwardReferralPoints(transaction.user);
+    }
   }
 
   // Cập nhật transaction

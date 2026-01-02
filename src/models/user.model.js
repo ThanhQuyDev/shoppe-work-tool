@@ -58,6 +58,20 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    referredBy: {
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: 'User',
+      default: null,
+    },
+    points: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    isActivated: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

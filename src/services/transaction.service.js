@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const { Transaction, User, BankAccount } = require('../models');
 const ApiError = require('../utils/ApiError');
-const { referralService } = require('./referral.service');
+const referralService = require('./referral.service');
 
 /**
  * Create a transaction (deposit or withdraw)

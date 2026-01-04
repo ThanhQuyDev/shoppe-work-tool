@@ -25,6 +25,14 @@ const registerSaving = async (userId, payload) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Interest rate not found');
   }
 
+  // Check KYC status
+  if (user.kycStatus !== 'approved') {
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      'KYC verification is required. Please complete KYC verification before investing.'
+    );
+  }
+
   if (amount < interestRate.minAmount) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Amount is lower than minimum requirement');
   }

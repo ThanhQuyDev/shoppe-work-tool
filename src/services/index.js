@@ -14,3 +14,4 @@ module.exports.stockService = require('./stock.service');
 module.exports.giftService = require('./gift.service');
 module.exports.referralService = require('./referral.service');
 module.exports.giftExchangeService = require('./giftExchange.service');
+module.exports.kycService = require('./kyc.service');

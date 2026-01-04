@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const checkKYC = require('../../middlewares/checkKYC');
 const bankAccountValidation = require('../../validations/bankAccount.validation');
 const bankAccountController = require('../../controllers/bankAccount.controller');
 
@@ -8,16 +9,16 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(bankAccountValidation.createBankAccount), bankAccountController.createBankAccount)
-  .get(auth(), validate(bankAccountValidation.getBankAccounts), bankAccountController.getBankAccounts);
+  .post(auth(), checkKYC, validate(bankAccountValidation.createBankAccount), bankAccountController.createBankAccount)
+  .get(auth(), checkKYC, validate(bankAccountValidation.getBankAccounts), bankAccountController.getBankAccounts);
 
-router.route('/me').get(auth(), bankAccountController.getMyBankAccount);
+router.route('/me').get(auth(), checkKYC, bankAccountController.getMyBankAccount);
 
 router
   .route('/:bankAccountId')
-  .get(auth(), validate(bankAccountValidation.getBankAccount), bankAccountController.getBankAccount)
-  .patch(auth(), validate(bankAccountValidation.updateBankAccount), bankAccountController.updateBankAccount)
-  .delete(auth(), validate(bankAccountValidation.deleteBankAccount), bankAccountController.deleteBankAccount);
+  .get(auth(), checkKYC, validate(bankAccountValidation.getBankAccount), bankAccountController.getBankAccount)
+  .patch(auth(), checkKYC, validate(bankAccountValidation.updateBankAccount), bankAccountController.updateBankAccount)
+  .delete(auth(), checkKYC, validate(bankAccountValidation.deleteBankAccount), bankAccountController.deleteBankAccount);
 
 module.exports = router;
 

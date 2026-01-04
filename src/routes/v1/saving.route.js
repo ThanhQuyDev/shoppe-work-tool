@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const checkKYC = require('../../middlewares/checkKYC');
 const savingValidation = require('../../validations/saving.validation');
 const savingController = require('../../controllers/saving.controller');
 
@@ -8,10 +9,10 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(savingValidation.registerSaving), savingController.registerSaving)
-  .get(auth(), validate(savingValidation.getSavings), savingController.getSavings);
+  .post(auth(), checkKYC, validate(savingValidation.registerSaving), savingController.registerSaving)
+  .get(auth(), checkKYC, validate(savingValidation.getSavings), savingController.getSavings);
 
-router.route('/:savingId').get(auth(), validate(savingValidation.getSaving), savingController.getSaving);
+router.route('/:savingId').get(auth(), checkKYC, validate(savingValidation.getSaving), savingController.getSaving);
 
 module.exports = router;
 

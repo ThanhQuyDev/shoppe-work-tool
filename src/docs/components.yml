@@ -26,6 +26,11 @@ components:
           type: boolean
           description: Trang thai kich hoat tai khoan (da dang ky va nap tien)
           default: false
+        kycStatus:
+          type: string
+          enum: [pending, approved, rejected, none]
+          description: Trang thai xac minh KYC
+          default: none
         bankAccount:
           type: object
           nullable: true
@@ -341,6 +346,81 @@ components:
           description: Voucher giam gia 100k
           pointsRequired: 1000
           img: https://example.com/voucher.png
+        status: pending
+
+    KYC:
+      type: object
+      properties:
+        id:
+          type: string
+        user:
+          type: string
+          description: ID cua user
+        documentType:
+          type: string
+          enum: [cccd, passport]
+          description: Loai giay to
+        documentNumber:
+          type: string
+          description: So giay to
+        fullName:
+          type: string
+          description: Ho ten day du
+        dateOfBirth:
+          type: string
+          format: date
+          description: Ngay sinh
+        gender:
+          type: string
+          enum: [male, female, other]
+          description: Gioi tinh
+        nationality:
+          type: string
+          description: Quoc tich
+        permanentAddress:
+          type: string
+          description: Dia chi thuong tru
+        frontImage:
+          type: string
+          description: URL anh mat truoc giay to
+        backImage:
+          type: string
+          description: URL anh mat sau giay to
+        portraitImage:
+          type: string
+          description: URL anh chan dung
+        status:
+          type: string
+          enum: [pending, approved, rejected]
+          description: Trang thai xac minh
+        approvedBy:
+          type: string
+          description: ID admin duyet
+        rejectedBy:
+          type: string
+          description: ID admin tu choi
+        approvedAt:
+          type: string
+          format: date-time
+        rejectedAt:
+          type: string
+          format: date-time
+        rejectionReason:
+          type: string
+          description: Ly do tu choi
+      example:
+        id: 6750be1a954b54139806ckyc
+        user: 5ebac534954b54139806c112
+        documentType: cccd
+        documentNumber: "001234567890"
+        fullName: "NGUYEN VAN A"
+        dateOfBirth: "1990-01-01"
+        gender: male
+        nationality: Vietnam
+        permanentAddress: "123 Duong ABC, Phuong XYZ, Quan 1, TP.HCM"
+        frontImage: https://example.com/front.jpg
+        backImage: https://example.com/back.jpg
+        portraitImage: https://example.com/portrait.jpg
         status: pending
 
     Token:

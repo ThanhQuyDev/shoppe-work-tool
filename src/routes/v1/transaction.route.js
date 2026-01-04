@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const checkKYC = require('../../middlewares/checkKYC');
 const transactionValidation = require('../../validations/transaction.validation');
 const transactionController = require('../../controllers/transaction.controller');
 
@@ -8,8 +9,8 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(transactionValidation.createTransaction), transactionController.createTransaction)
-  .get(auth(), validate(transactionValidation.getTransactions), transactionController.getTransactions);
+  .post(auth(), checkKYC, validate(transactionValidation.createTransaction), transactionController.createTransaction)
+  .get(auth(), checkKYC, validate(transactionValidation.getTransactions), transactionController.getTransactions);
 
 router
   .route('/all')
@@ -17,7 +18,7 @@ router
 
 router
   .route('/:transactionId')
-  .get(auth(), validate(transactionValidation.getTransaction), transactionController.getTransaction);
+  .get(auth(), checkKYC, validate(transactionValidation.getTransaction), transactionController.getTransaction);
 
 router
   .route('/:transactionId/approve')

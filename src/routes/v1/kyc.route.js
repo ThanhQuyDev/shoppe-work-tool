@@ -1,57 +1,47 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
-const checkKYC = require('../../middlewares/checkKYC');
-const giftExchangeValidation = require('../../validations/giftExchange.validation');
-const giftExchangeController = require('../../controllers/giftExchange.controller');
+const kycValidation = require('../../validations/kyc.validation');
+const kycController = require('../../controllers/kyc.controller');
 
 const router = express.Router();
 
-router
-  .route('/')
-  .post(auth(), checkKYC, validate(giftExchangeValidation.createGiftExchange), giftExchangeController.createGiftExchange)
-  .get(auth(), checkKYC, validate(giftExchangeValidation.getGiftExchanges), giftExchangeController.getGiftExchanges);
+router.use(auth()); // Tất cả routes đều yêu cầu authentication
+
+router.route('/').post(validate(kycValidation.createOrUpdateKYC), kycController.createOrUpdateKYC).get(kycController.getKYC);
 
 router
   .route('/all')
-  .get(auth('manageUsers'), validate(giftExchangeValidation.getAllGiftExchanges), giftExchangeController.getAllGiftExchanges);
+  .get(auth('manageUsers'), validate(kycValidation.getKYCs), kycController.getAllKYCs);
 
 router
-  .route('/:giftExchangeId')
-  .get(auth(), checkKYC, validate(giftExchangeValidation.getGiftExchange), giftExchangeController.getGiftExchange);
+  .route('/:kycId')
+  .get(validate(kycValidation.getKYC), kycController.getKYCById);
 
 router
-  .route('/:giftExchangeId/approve')
-  .patch(
-    auth('manageUsers'),
-    validate(giftExchangeValidation.approveGiftExchange),
-    giftExchangeController.approveGiftExchange
-  );
+  .route('/:kycId/approve')
+  .patch(auth('manageUsers'), validate(kycValidation.approveKYC), kycController.approveKYC);
 
 router
-  .route('/:giftExchangeId/reject')
-  .patch(
-    auth('manageUsers'),
-    validate(giftExchangeValidation.rejectGiftExchange),
-    giftExchangeController.rejectGiftExchange
-  );
+  .route('/:kycId/reject')
+  .patch(auth('manageUsers'), validate(kycValidation.rejectKYC), kycController.rejectKYC);
 
 module.exports = router;
 
 /**
  * @swagger
  * tags:
- *   name: GiftExchange
- *   description: Doi qua tang bang diem referral
+ *   name: KYC
+ *   description: Xac minh thong tin ca nhan (Know Your Customer)
  */
 
 /**
  * @swagger
- * /gift-exchanges:
+ * /kyc:
  *   post:
- *     summary: Tao yeu cau doi qua tang
- *     description: User tao yeu cau doi qua tang, diem se bi tru ngay lap tuc.
- *     tags: [GiftExchange]
+ *     summary: Gui thong tin KYC
+ *     description: User gui thong tin xac minh (CCCD hoac ho chieu + anh chan dung).
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -61,84 +51,99 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - giftId
+ *               - documentType
+ *               - documentNumber
+ *               - fullName
+ *               - dateOfBirth
+ *               - gender
+ *               - permanentAddress
+ *               - frontImage
+ *               - backImage
+ *               - portraitImage
  *             properties:
- *               giftId:
+ *               documentType:
  *                 type: string
- *                 description: ID cua qua tang muon doi
+ *                 enum: [cccd, passport]
+ *                 description: Loai giay to (CCCD hoac ho chieu)
+ *               documentNumber:
+ *                 type: string
+ *                 description: So giay to
+ *               fullName:
+ *                 type: string
+ *                 description: Ho ten day du
+ *               dateOfBirth:
+ *                 type: string
+ *                 format: date
+ *                 description: Ngay sinh
+ *               gender:
+ *                 type: string
+ *                 enum: [male, female, other]
+ *                 description: Gioi tinh
+ *               nationality:
+ *                 type: string
+ *                 default: Vietnam
+ *                 description: Quoc tich
+ *               permanentAddress:
+ *                 type: string
+ *                 description: Dia chi thuong tru
+ *               frontImage:
+ *                 type: string
+ *                 description: URL anh mat truoc giay to
+ *               backImage:
+ *                 type: string
+ *                 description: URL anh mat sau giay to
+ *               portraitImage:
+ *                 type: string
+ *                 description: URL anh chan dung
  *             example:
- *               giftId: 6750be1a954b54139806cdef
+ *               documentType: cccd
+ *               documentNumber: "001234567890"
+ *               fullName: "NGUYEN VAN A"
+ *               dateOfBirth: "1990-01-01"
+ *               gender: male
+ *               nationality: Vietnam
+ *               permanentAddress: "123 Duong ABC, Phuong XYZ, Quan 1, TP.HCM"
+ *               frontImage: "https://example.com/front.jpg"
+ *               backImage: "https://example.com/back.jpg"
+ *               portraitImage: "https://example.com/portrait.jpg"
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/GiftExchange'
+ *                $ref: '#/components/schemas/KYC'
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *
  *   get:
- *     summary: Lay danh sach yeu cau doi qua tang cua user
- *     description: User xem danh sach cac yeu cau doi qua tang cua minh.
- *     tags: [GiftExchange]
+ *     summary: Xem thong tin KYC cua user
+ *     description: User xem thong tin KYC cua minh.
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
- *     parameters:
- *       - in: query
- *         name: status
- *         schema:
- *           type: string
- *           enum: [pending, approved, rejected]
- *         description: Loc theo trang thai
- *       - in: query
- *         name: sortBy
- *         schema:
- *           type: string
- *         description: field:desc/asc
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 10
- *       - in: query
- *         name: page
- *         schema:
- *           type: integer
- *           default: 1
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 results:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/GiftExchange'
- *                 page:
- *                   type: integer
- *                 limit:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
- *                 totalResults:
- *                   type: integer
+ *                $ref: '#/components/schemas/KYC'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
+ *       "404":
+ *         $ref: '#/components/responses/NotFound'
  */
 
 /**
  * @swagger
- * /gift-exchanges/all:
+ * /kyc/all:
  *   get:
- *     summary: Lay danh sach tat ca yeu cau doi qua tang (Admin)
- *     description: Admin xem danh sach tat ca cac yeu cau doi qua tang.
- *     tags: [GiftExchange]
+ *     summary: Lay danh sach tat ca KYC (Admin)
+ *     description: Admin xem danh sach tat ca cac yeu cau KYC.
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -179,7 +184,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/GiftExchange'
+ *                     $ref: '#/components/schemas/KYC'
  *                 page:
  *                   type: integer
  *                 limit:
@@ -196,10 +201,10 @@ module.exports = router;
 
 /**
  * @swagger
- * /gift-exchanges/{id}:
+ * /kyc/{id}:
  *   get:
- *     summary: Xem chi tiet yeu cau doi qua tang
- *     tags: [GiftExchange]
+ *     summary: Xem chi tiet KYC
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -208,30 +213,29 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Gift exchange id
+ *         description: KYC id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/GiftExchange'
+ *                $ref: '#/components/schemas/KYC'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
- *
  */
 
 /**
  * @swagger
- * /gift-exchanges/{id}/approve:
+ * /kyc/{id}/approve:
  *   patch:
- *     summary: Duyet yeu cau doi qua tang (Admin)
- *     description: Admin duyet yeu cau doi qua tang, cap nhat status thanh approved.
- *     tags: [GiftExchange]
+ *     summary: Duyet KYC (Admin)
+ *     description: Admin duyet yeu cau KYC.
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -240,14 +244,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Gift exchange id
+ *         description: KYC id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/GiftExchange'
+ *                $ref: '#/components/schemas/KYC'
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "401":
@@ -260,11 +264,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /gift-exchanges/{id}/reject:
+ * /kyc/{id}/reject:
  *   patch:
- *     summary: Tu choi yeu cau doi qua tang (Admin)
- *     description: Admin tu choi yeu cau doi qua tang va tra lai diem cho user.
- *     tags: [GiftExchange]
+ *     summary: Tu choi KYC (Admin)
+ *     description: Admin tu choi yeu cau KYC.
+ *     tags: [KYC]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -273,14 +277,24 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: Gift exchange id
+ *         description: KYC id
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rejectionReason:
+ *                 type: string
+ *                 description: Ly do tu choi
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/GiftExchange'
+ *                $ref: '#/components/schemas/KYC'
  *       "400":
  *         $ref: '#/components/responses/BadRequest'
  *       "401":

@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const checkKYC = require('../../middlewares/checkKYC');
 const referralValidation = require('../../validations/referral.validation');
 const referralController = require('../../controllers/referral.controller');
 
@@ -8,11 +9,11 @@ const router = express.Router();
 
 router.use(auth()); // Tất cả routes đều yêu cầu authentication
 
-router.route('/stats').get(referralController.getReferralStats);
+router.route('/stats').get(checkKYC, referralController.getReferralStats);
 
 router
   .route('/tree')
-  .get(validate(referralValidation.getReferralTree), referralController.getReferralTree);
+  .get(checkKYC, validate(referralValidation.getReferralTree), referralController.getReferralTree);
 
 module.exports = router;
 

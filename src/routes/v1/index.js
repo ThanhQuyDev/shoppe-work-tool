@@ -13,6 +13,7 @@ const stockRoute = require('./stock.route');
 const giftRoute = require('./gift.route');
 const giftExchangeRoute = require('./giftExchange.route');
 const referralRoute = require('./referral.route');
+const kycRoute = require('./kyc.route');
 const docsRoute = require('./docs.route');
 
 const router = express.Router();
@@ -73,6 +74,10 @@ const defaultRoutes = [
   {
     path: '/referral',
     route: referralRoute,
+  },
+  {
+    path: '/kyc',
+    route: kycRoute,
   },
 ];
 

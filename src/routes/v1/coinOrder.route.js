@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
+const checkKYC = require('../../middlewares/checkKYC');
 const coinOrderValidation = require('../../validations/coinOrder.validation');
 const coinOrderController = require('../../controllers/coinOrder.controller');
 
@@ -8,12 +9,12 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(auth(), validate(coinOrderValidation.createOrder), coinOrderController.createOrder)
-  .get(auth(), validate(coinOrderValidation.getOrders), coinOrderController.getOrders);
+  .post(auth(), checkKYC, validate(coinOrderValidation.createOrder), coinOrderController.createOrder)
+  .get(auth(), checkKYC, validate(coinOrderValidation.getOrders), coinOrderController.getOrders);
 
-router.route('/wallet').get(auth(), coinOrderController.getMyWallet);
+router.route('/wallet').get(auth(), checkKYC, coinOrderController.getMyWallet);
 
-router.route('/:orderId').get(auth(), validate(coinOrderValidation.getOrder), coinOrderController.getOrder);
+router.route('/:orderId').get(auth(), checkKYC, validate(coinOrderValidation.getOrder), coinOrderController.getOrder);
 
 module.exports = router;
 
